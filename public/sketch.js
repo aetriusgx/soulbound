@@ -37,7 +37,7 @@ function draw() {
 
 function keyPressed() {
 
-    bob.keyPressed();
+    player.keyPressed();
 }
 
 function themePress() {

@@ -34,26 +34,7 @@ class Character {
             this.y = y;
             this.present = true;
 
-            this.lineVectors = {
-                head: {
-                    x: this.x, y: this.y - 160, r: 40
-                },
-                leftArm: {
-                    x1: this.x, y1: this.y - 116.5, x2: this.x - 27, y2: this.y - 80.5
-                },
-                rightArm: {
-                    x1: this.x, y1: this.y - 116.5, x2: this.x + 27, y2: this.y - 80.5
-                },
-                body: {
-                    x1: this.x, y1: this.y - 140, x2: this.x, y2: this.y - 41.5
-                },
-                leftLeg: {
-                    x1: this.x, y1: this.y - 41.5, x2: this.x - 20, y2: this.y
-                },
-                rightLeg: {
-                    x1: this.x, y1: this.y - 41.5, x2: this.x + 20, y2: this.y
-                }
-            };
+            this.updateCoords(this.x, this.y);
         }
         strokeWeight(4);
         fill(this.hue ? this.hue : 0, this.hue ? 100 : 0, this.hue ? 100 : 0);
@@ -137,11 +118,10 @@ class Player extends Character {
     };
 
     drawNameTag() {
-        let size = this.name.length - 1;
         if(this.present) {
             noStroke();
             fill(0);
-            textAlign("CENTER");
+            textAlign(CENTER);
             text(this.name, this.lineVectors.head.x, this.lineVectors.head.y - 30);
         }
     }
