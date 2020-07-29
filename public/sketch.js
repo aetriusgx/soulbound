@@ -1,4 +1,5 @@
 let bob;
+let toggles = {};
 
 function preload() {
 
@@ -13,8 +14,13 @@ function setup() {
 function draw() {
     background(80);
     bob.draw(180, height);
+
+    toggles.theme = new Clickable();
 }
 
 function keyPressed() {
+
+    toggles.theme.locate(20, 20);
+
     bob.keyPressed();
 }
