@@ -93,12 +93,6 @@ class Character {
         };
     }
 
-    /**@param {number} boost The height boost of the jump
-     * @param {number} direction the x-direction of the jump */
-    jump(boost, direction) {
-        
-    }
-
     physics() {
         if (this.y < height) {
             this.velocityY = this.velocityY + this.forceY * speed;

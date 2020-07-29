@@ -6,7 +6,7 @@ function preload() {
 }
 
 function setup() {
-    createCanvas(windowWidth, windowHeight);
+    createCanvas(windowWidth, windowHeight * .8);
     colorMode(HSB, 360, 100, 100);
 
     socket = io.connect('http://localhost:5501');
@@ -19,7 +19,7 @@ function newDrawing(data) {
 }
 
 function draw() {
-    background(0, 0, 95);
+    background(80);
     bob.draw(180, height);
 }
 
