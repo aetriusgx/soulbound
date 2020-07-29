@@ -45,6 +45,7 @@ function draw() {
     power.random();
     power.show();
     power.powerFall();
+    power.powerUpCollison();
 }
 
 function keyPressed() {

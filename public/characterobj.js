@@ -105,17 +105,17 @@ class Character {
         fill(100);
         strokeWeight(1);
         rect(x, this.lineVectors.head.y - 40, 100, 15);
-        
-        if(this.health >= 70) {
+
+        if (this.health >= 70) {
             fill(129, 88, 77);
         }
-        if(this.health >= 40 && this.health < 70) {
+        if (this.health >= 40 && this.health < 70) {
             fill(64, 86, 100);
         }
-        if(this.health >= 20 && this.health < 40) {
+        if (this.health >= 20 && this.health < 40) {
             fill(41, 93, 90);
         }
-        if(this.health >= 1 && this.health < 20) {
+        if (this.health >= 1 && this.health < 20) {
             fill(0, 93, 90);
         }
         noStroke();
@@ -126,12 +126,110 @@ class Character {
         if (this.y < height) {
             this.velocityY = this.velocityY + this.forceY * speed;
             this.y = this.y + this.velocityY * speed;
+            this.updateCoords(this.x, this.y);
         }
         if (this.y >= height) {
             this.velocityY = 0;
             this.y = height;
             this.canKeepJumping = true;
             this.boost = 0;
+            this.updateCoords(this.x, this.y);
+        }
+    }
+    /**
+     * 
+     * @param {String} type Type of collision (to the character)
+     * @param {Array} shapeParams Parameters of the other shape
+     * @returns Boolean
+     */
+    detectCollision(type, shapeParams) {
+        let head, leftarm, rightarm, body, leftleg, rightleg;
+        switch (type.toLowerCase()) {
+            case 'circle':
+                head = collideCircleCircle(
+                    this.lineVectors.head.x1, this.lineVectors.head.y1, this.lineVectors.head.r,
+                    shapeParams[0], shapeParams[1], shapeParams[2]
+                );
+                leftarm = collideLineCircle(
+                    this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2,
+                    shapeParams[0], shapeParams[1], shapeParams[2]
+                );
+                rightarm = collideLineCircle(
+                    this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2,
+                    shapeParams[0], shapeParams[1], shapeParams[2]
+                );
+                body = collideLineCircle(
+                    this.lineVectors.body.x1, this.lineVectors.body.y1, this.lineVectors.body.x2, this.lineVectors.body.y2,
+                    shapeParams[0], shapeParams[1], shapeParams[2]
+                );
+                leftleg = collideLineCircle(
+                    this.lineVectors.leftLeg.x1, this.lineVectors.leftLeg.y1, this.lineVectors.leftLeg.x2, this.lineVectors.leftLeg.y2,
+                    shapeParams[0], shapeParams[1], shapeParams[2]
+                );
+                rightleg = collideLineCircle(
+                    this.lineVectors.leftLeg.x1, this.lineVectors.leftLeg.y1, this.lineVectors.leftLeg.x2, this.lineVectors.leftLeg.y2,
+                    shapeParams[0], shapeParams[1], shapeParams[2]
+                );
+                if (head || leftarm || rightarm || body || leftleg || rightleg) return true;
+
+            case 'rect':
+                head = collideRectCircle(
+                    shapeParams[0], shapeParams[1], shapeParams[2], shapeParams[3],
+                    this.lineVectors.head.x1, this.lineVectors.head.y1, this.lineVectors.head.r
+                );
+                leftarm = collideLineRect(
+                    this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2,
+                    shapeParams[0], shapeParams[1], shapeParams[2], shapeParams[3]
+                );
+                rightarm = collideLineRect(
+                    this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2,
+                    shapeParams[0], shapeParams[1], shapeParams[2], shapeParams[3]
+                );
+                body = collideLineRect(
+                    this.lineVectors.body.x1, this.lineVectors.body.y1, this.lineVectors.body.x2, this.lineVectors.body.y2,
+                    shapeParams[0], shapeParams[1], shapeParams[2], shapeParams[3]
+                );
+                leftleg = collideLineRect(
+                    this.lineVectors.leftLeg.x1, this.lineVectors.leftLeg.y1, this.lineVectors.leftLeg.x2, this.lineVectors.leftLeg.y2,
+                    shapeParams[0], shapeParams[1], shapeParams[2], shapeParams[3]
+                );
+                rightleg = collideLineRect(
+                    this.lineVectors.leftLeg.x1, this.lineVectors.leftLeg.y1, this.lineVectors.leftLeg.x2, this.lineVectors.leftLeg.y2,
+                    shapeParams[0], shapeParams[1], shapeParams[2], shapeParams[3]
+                );
+                if (head || leftarm || rightarm || body || leftleg || rightleg) return true;
+
+            case 'line':
+                head = collideLineCircle(
+                    shapeParams[0], shapeParams[1], shapeParams[2], shapeParams[3],
+                    this.lineVectors.head.x1, this.lineVectors.head.y1, this.lineVectors.head.r
+                );
+                leftarm = collideLineLine(
+                    this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2,
+                    shapeParams[0], shapeParams[1], shapeParams[2], shapeParams[3]
+                );
+                rightarm = collideLineLine(
+                    this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2,
+                    shapeParams[0], shapeParams[1], shapeParams[2], shapeParams[3]
+                );
+                body = collideLineLine(
+                    this.lineVectors.body.x1, this.lineVectors.body.y1, this.lineVectors.body.x2, this.lineVectors.body.y2,
+                    shapeParams[0], shapeParams[1], shapeParams[2], shapeParams[3]
+                );
+                leftleg = collideLineLine(
+                    this.lineVectors.leftLeg.x1, this.lineVectors.leftLeg.y1, this.lineVectors.leftLeg.x2, this.lineVectors.leftLeg.y2,
+                    shapeParams[0], shapeParams[1], shapeParams[2], shapeParams[3]
+                );
+                rightleg = collideLineLine(
+                    this.lineVectors.leftLeg.x1, this.lineVectors.leftLeg.y1, this.lineVectors.leftLeg.x2, this.lineVectors.leftLeg.y2,
+                    shapeParams[0], shapeParams[1], shapeParams[2], shapeParams[3]
+                );
+                if (head || leftarm || rightarm || body || leftleg || rightleg) return true;
+            case 'point':
+                
+                if (head || leftarm || rightarm || body || leftleg || rightleg) return true;
+            default:
+                return false;
         }
     }
 
@@ -197,7 +295,7 @@ class Player extends Character {
         if (keyCode == (this.keys[0]) && this.canKeepJumping) {
             this.canKeepJumping = false;
             this.y -= 75;
-
+            this.updateCoords(this.x, this.y);
 
             console.log("W pressed");
         }
@@ -217,43 +315,43 @@ class Player extends Character {
                 this.lineVectors.leftArm.x2 -= reach;
                 this.lineVectors.leftArm.y2 = this.lineVectors.leftArm.y1;
 
-                setTimeout(() => {
-                    this.lineVectors.leftArm.x2 = this.x - 27;
-                    this.lineVectors.leftArm.y2 = this.y - 80.5;
-                }, cooldown);
-
                 for (var player of Player.Players) {
                     if (player.name != this.name) {
                         let connectedWithLeftArm = collideLineLine(
                             this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2,
-                            player.lineVectors.leftArm.x1, player.lineVectors.leftArm.y1, player.lineVectors.leftArm.x2, player.lineVectors.leftArm.y2 
+                            player.lineVectors.leftArm.x1, player.lineVectors.leftArm.y1, player.lineVectors.leftArm.x2, player.lineVectors.leftArm.y2
                         );
                         let connectedWithRightArm = collideLineLine(
                             this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2,
-                            player.lineVectors.rightArm.x1, player.lineVectors.rightArm.y1, player.lineVectors.rightArm.x2, player.lineVectors.rightArm.y2     
+                            player.lineVectors.rightArm.x1, player.lineVectors.rightArm.y1, player.lineVectors.rightArm.x2, player.lineVectors.rightArm.y2
                         );
                         let connectedWithLeftLeg = collideLineLine(
                             this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2,
-                            player.lineVectors.leftLeg.x1, player.lineVectors.leftLeg.y1, player.lineVectors.leftLeg.x2, player.lineVectors.leftLeg.y2 
+                            player.lineVectors.leftLeg.x1, player.lineVectors.leftLeg.y1, player.lineVectors.leftLeg.x2, player.lineVectors.leftLeg.y2
                         );
                         let connectedWithRightLeg = collideLineLine(
                             this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2,
-                            player.lineVectors.rightLeg.x1, player.lineVectors.rightLeg.y1, player.lineVectors.rightLeg.x2, player.lineVectors.rightLeg.y2     
+                            player.lineVectors.rightLeg.x1, player.lineVectors.rightLeg.y1, player.lineVectors.rightLeg.x2, player.lineVectors.rightLeg.y2
                         );
                         let connectedWithBody = collideLineLine(
                             this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2,
-                            player.lineVectors.body.x1, player.lineVectors.body.y1, player.lineVectors.body.x2, player.lineVectors.body.y2     
+                            player.lineVectors.body.x1, player.lineVectors.body.y1, player.lineVectors.body.x2, player.lineVectors.body.y2
                         );
-                        let connectedWithHead = collideLineCircle(
+                        let connectedWithHead = collideLineRect(
                             this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2,
-                            player.lineVectors.head.x, player.lineVectors.head.y, player.lineVectors.head.r 
+                            player.lineVectors.head.x, player.lineVectors.head.y, player.lineVectors.head.r
                         );
 
-                        if(connectedWithHead) player.health -= this.damage * 2;
-                        if(connectedWithBody) player.health -= this.damage * 1.25;
-                        if(connectedWithLeftArm || connectedWithLeftLeg || connectedWithRightArm || connectedWithRightLeg) player.health -= this.damage;
+                        if (connectedWithHead) player.health -= this.damage * 2;
+                        if (connectedWithBody) player.health -= this.damage * 1.25;
+                        if (connectedWithLeftArm || connectedWithLeftLeg || connectedWithRightArm || connectedWithRightLeg) player.health -= this.damage;
                     }
                 }
+                
+                setTimeout(() => {
+                    this.lineVectors.leftArm.x2 = this.x - 27;
+                    this.lineVectors.leftArm.y2 = this.y - 80.5;
+                }, cooldown);
 
                 break;
             case 'right':
@@ -291,49 +389,4 @@ class Player extends Character {
     }
 
     static Players = [];
-}
-
-class PhysicalObject {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-
-        this.mass = 30;
-        this.velocityY = 0;
-        this.forceY = this.mass * gravity;
-        this.accelerationY = this.forceY / this.mass;
-
-        PhysicalObject.PhysicalObjects.push(this);
-    }
-
-    applyGravity() {
-        this.velocityY = this.velocityY + this.accelerationY * speed;
-        this.y = this.y + this.velocityY * speed;
-
-        if (this.y >= height) {
-            this.y = height;
-        }
-    }
-
-    static PhysicalObjects = [];
-}
-
-class Circle extends PhysicalObject {
-    constructor(x, y, widthX, widthY) {
-        this.x = x;
-        this.y = y;
-        this.widthX = widthX;
-        this.widthY = widthY;
-        this.bouncingInterval;
-        this.maxJumpHeight;
-        super(this.x, this.y);
-
-        ellipse(this.x, this.y, this.widthX, this.widthY ? this.widthY : this.widthX);
-        Circle.Circles.push(this);
-    }
-
-    jump(duration) {
-    }
-
-    static Circles = [];
 }
