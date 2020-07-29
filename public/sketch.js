@@ -1,4 +1,5 @@
 let player;
+let power;
 let theme = "light";
 let toggles = {};
 let Player_Initiated = false;
@@ -14,9 +15,9 @@ function setup() {
     colorMode(HSB, 360, 100, 100);
 
     if (!Player_Initiated) {
-        let name = prompt("What would you like your name to be?");
+        //let name = prompt("What would you like your name to be?");
 
-        player = new Player(name, [87, 65, 83, 68, 81, 69], 220);
+        player = new Player("name", [87, 65, 83, 68, 81, 69], 220);
         Player_Initiated = true;
     }
 
@@ -28,6 +29,8 @@ function setup() {
     socket.on('key', (data) => {
         console.log("sending data");
     })
+
+    power = new Power();
 }
 
 function draw() {
@@ -39,6 +42,9 @@ function draw() {
     if (Player_Initiated) player.draw(180, height);
 
     themePress();
+    power.random();
+    power.show();
+    power.powerFall();
 }
 
 function keyPressed() {
