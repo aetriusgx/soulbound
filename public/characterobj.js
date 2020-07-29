@@ -1,5 +1,6 @@
 let gravity = 80;
 let speed = 0.05;
+let character_speeds = 7.5;
 
 class Character {
     /**@param {number} hue Hue color of the character */
@@ -40,8 +41,6 @@ class Character {
         fill(this.hue ? this.hue : 0, this.hue ? 100 : 0, this.hue ? 100 : 0);
         stroke(this.hue ? this.hue : 0, this.hue ? 100 : 0, this.hue ? 100 : 0);
 
-        
-
         ellipse(this.lineVectors.head.x, this.lineVectors.head.y, this.lineVectors.head.r);                          //Head
         line(this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2);    //Left Arm
         line(this.lineVectors.rightArm.x1, this.lineVectors.rightArm.y1, this.lineVectors.rightArm.x2, this.lineVectors.rightArm.y2);   //Right Arm
@@ -49,6 +48,13 @@ class Character {
         line(this.lineVectors.leftLeg.x1, this.lineVectors.leftLeg.y1, this.lineVectors.leftLeg.x2, this.lineVectors.leftLeg.y2);            //Left Leg
         line(this.lineVectors.rightLeg.x1, this.lineVectors.rightLeg.y1, this.lineVectors.rightLeg.x2, this.lineVectors.rightLeg.y2);           //Right Leg
 
+        if(this.lineVectors.leftArm.x2 <= 0 || this.lineVectors.leftLeg.x2 <= 0) {
+            this.x = 27;
+        }
+
+        if(this.lineVectors.rightArm.x2 >= width || this.lineVectors.rightLeg.x2 >= width) {
+            this.x = width - 27;
+        }
     }
 
     updateCoords(x, y) {
@@ -131,13 +137,13 @@ class Player extends Character {
             this.physics();
             
             if (keyIsDown(this.keys[1])) {
-                this.x -= 5;
+                this.x -= character_speeds;
                 this.updateCoords(this.x, this.y);
                 console.log("A pressed");
             }
             
             if (keyIsDown(this.keys[3])) {
-                this.x += 5;
+                this.x += character_speeds;
                 this.updateCoords(this.x, this.y);
                 console.log("D Pressed");
             }
@@ -153,7 +159,7 @@ class Player extends Character {
         }
 
         if (keyCode == (this.keys[2])) {
-            this.y += 5;
+            this.y += character_speeds;
             this.updateCoords(this.x, this.y);
             console.log("S pressed");
         }
