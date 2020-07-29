@@ -126,7 +126,7 @@ class Player extends Character {
     drawNameTag() {
         if(this.present) {
             noStroke();
-            fill(0);
+            fill(theme  == "dark" ? 'white' : 'black');
             textAlign(CENTER);
             text(this.name, this.lineVectors.head.x, this.lineVectors.head.y - 30);
         }
