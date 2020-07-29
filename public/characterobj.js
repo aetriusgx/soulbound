@@ -328,20 +328,11 @@ class Circle extends PhysicalObject {
         this.maxJumpHeight;
         super(this.x, this.y);
 
-        ellipse(this.x, this.y, this.x, this.y ? this.y : this.x);
+        ellipse(this.x, this.y, this.widthX, this.widthY ? this.widthY : this.widthX);
         Circle.Circles.push(this);
     }
 
     jump(duration) {
-        //Note: falls 20 pixels per frame
-        if (this.falling && this.y >= height) {
-            if (!this.maxJumpHeight) this.maxJumpHeight = this.y - (this.fallVelocity * 10);
-
-            if (this.maxJumpHeight != 0) {
-                this.canApplyGravity = false;
-                this.y += this.fallVelocity / 2;
-            }
-        }
     }
 
     static Circles = [];

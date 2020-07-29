@@ -19,22 +19,23 @@ class Power {
         if(powerUpActivity) {
             stroke(58, 100, 43);
             strokeWeight(2);
-            fill(58, 58, 58);
+            fill(60, 95, 100);
             ellipse(this.x, this.y, this.diameter);
+            strokeWeight(2.5);
             stroke(0, 0, 0);
             text('speed', this.x, this.y);
-            if(this.y > windowHeight * 0.88) {
-                this.y = windowHeight * 0.88;
+            if(this.y > windowHeight * 0.895) {
+                this.y = windowHeight * 0.895;
                 
             }
         }
-    }
-    powerUpCollison() {
-
     }
     powerFall() {
         if(this.y < windowHeight * 0.9) {
             this.y += 3;
         }
+    }
+    powerUpCollison() {
+        player.
     }
 }
