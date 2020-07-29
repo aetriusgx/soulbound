@@ -2,6 +2,7 @@ let player;
 let theme = "light";
 let toggles = {};
 let Player_Initiated = false;
+let socket;
 toggles.theme;
 
 function preload() {
@@ -22,6 +23,11 @@ function setup() {
     toggles.theme = new Clickable();
     toggles.theme.locate(20, 20);
     toggles.theme.strokeWeight = 0;
+
+    socket = io.connect("http://localhost:5500/");
+    socket.on('key', (data) => {
+        console.log("sending data");
+    })
 }
 
 function draw() {
