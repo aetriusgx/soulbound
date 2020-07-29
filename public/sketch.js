@@ -1,6 +1,7 @@
-let bob;
+let player;
 let theme = "light";
 let toggles = {};
+let Player_Initiated = false;
 toggles.theme;
 
 function preload() {
@@ -10,20 +11,26 @@ function preload() {
 function setup() {
     createCanvas(windowWidth, windowHeight * .9);
     colorMode(HSB, 360, 100, 100);
-    bob = new Player("Bob", [87, 65, 83, 68, 81, 69], 220);
-    
+
+    if (!Player_Initiated) {
+        let name = prompt("What would you like your name to be?");
+
+        player = new Player(name, [87, 65, 83, 68, 81, 69], 220);
+        Player_Initiated = true;
+    }
+
     toggles.theme = new Clickable();
     toggles.theme.locate(20, 20);
     toggles.theme.strokeWeight = 0;
 }
 
 function draw() {
-    if(theme == "light") background(85), toggles.theme.text = "Dark Mode", toggles.theme.color = "#EEEEEE", toggles.theme.textColor = "#000000";
-    if(theme == "dark") background(0), toggles.theme.text = "Light Mode", toggles.theme.color = "#2b2b2b", toggles.theme.textColor = "#EEEEEE";
-    
+    if (theme == "light") background(85), toggles.theme.text = "Dark Mode", toggles.theme.color = "#EEEEEE", toggles.theme.textColor = "#000000";
+    if (theme == "dark") background(0), toggles.theme.text = "Light Mode", toggles.theme.color = "#2b2b2b", toggles.theme.textColor = "#EEEEEE";
+
     toggles.theme.draw();
 
-    bob.draw(180, height);
+    if (Player_Initiated) player.draw(180, height);
 
     themePress();
 }
@@ -35,7 +42,7 @@ function keyPressed() {
 
 function themePress() {
     toggles.theme.onPress = () => {
-        if(theme == "light") theme = "dark";
+        if (theme == "light") theme = "dark";
         else theme = "light";
     }
 }

@@ -141,7 +141,8 @@ class Player extends Character {
         if(this.present) {
             noStroke();
             fill(0);
-            text(this.name, this.lineVectors.head.x - this.lineVectors.head.r / 4 - size, this.lineVectors.head.y - 25);
+            textAlign("CENTER");
+            text(this.name, this.lineVectors.head.x, this.lineVectors.head.y - 30);
         }
     }
 
