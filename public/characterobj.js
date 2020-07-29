@@ -143,9 +143,11 @@ class Player extends Character {
     };
 
     drawNameTag() {
-        let size = this.name.length;
+        let size = this.name.length - 1;
         if(this.present) {
-            
+            noStroke();
+            fill(0);
+            text(this.name, this.lineVectors.head.x - this.lineVectors.head.r / 4 - size, this.lineVectors.head.y - 25);
         }
     }
 
@@ -215,6 +217,7 @@ class Player extends Character {
         this.render(x, y);
         this.physics();
         this.move();
+        this.drawNameTag();
     }
 
     keyPressed() {
