@@ -1,5 +1,6 @@
 let gravity = 80;
 let speed = 0.05;
+let character_speeds = 7.5;
 
 class Character {
     /**@param {number} hue Hue color of the character */
@@ -34,32 +35,11 @@ class Character {
             this.y = y;
             this.present = true;
 
-            this.lineVectors = {
-                head: {
-                    x: this.x, y: this.y - 160, r: 40
-                },
-                leftArm: {
-                    x1: this.x, y1: this.y - 116.5, x2: this.x - 27, y2: this.y - 80.5
-                },
-                rightArm: {
-                    x1: this.x, y1: this.y - 116.5, x2: this.x + 27, y2: this.y - 80.5
-                },
-                body: {
-                    x1: this.x, y1: this.y - 140, x2: this.x, y2: this.y - 41.5
-                },
-                leftLeg: {
-                    x1: this.x, y1: this.y - 41.5, x2: this.x - 20, y2: this.y
-                },
-                rightLeg: {
-                    x1: this.x, y1: this.y - 41.5, x2: this.x + 20, y2: this.y
-                }
-            };
+            this.updateCoords(this.x, this.y);
         }
         strokeWeight(4);
         fill(this.hue ? this.hue : 0, this.hue ? 100 : 0, this.hue ? 100 : 0);
         stroke(this.hue ? this.hue : 0, this.hue ? 100 : 0, this.hue ? 100 : 0);
-
-        
 
         ellipse(this.lineVectors.head.x, this.lineVectors.head.y, this.lineVectors.head.r);                          //Head
         line(this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2);    //Left Arm
@@ -68,6 +48,13 @@ class Character {
         line(this.lineVectors.leftLeg.x1, this.lineVectors.leftLeg.y1, this.lineVectors.leftLeg.x2, this.lineVectors.leftLeg.y2);            //Left Leg
         line(this.lineVectors.rightLeg.x1, this.lineVectors.rightLeg.y1, this.lineVectors.rightLeg.x2, this.lineVectors.rightLeg.y2);           //Right Leg
 
+        if(this.lineVectors.leftArm.x2 <= 0 || this.lineVectors.leftLeg.x2 <= 0) {
+            this.x = 27;
+        }
+
+        if(this.lineVectors.rightArm.x2 >= width || this.lineVectors.rightLeg.x2 >= width) {
+            this.x = width - 27;
+        }
     }
 
     updateCoords(x, y) {
@@ -91,12 +78,6 @@ class Character {
                 x1: x, y1: y - 41.5, x2: x + 20, y2: y
             }
         };
-    }
-
-    /**@param {number} boost The height boost of the jump
-     * @param {number} direction the x-direction of the jump */
-    jump(boost, direction) {
-        
     }
 
     physics() {
@@ -143,9 +124,11 @@ class Player extends Character {
     };
 
     drawNameTag() {
-        let size = this.name.length;
         if(this.present) {
-            
+            noStroke();
+            fill(theme  == "dark" ? 'white' : 'black');
+            textAlign(CENTER);
+            text(this.name, this.lineVectors.head.x, this.lineVectors.head.y - 30);
         }
     }
 
@@ -154,13 +137,13 @@ class Player extends Character {
             this.physics();
             
             if (keyIsDown(this.keys[1])) {
-                this.x -= 5;
+                this.x -= character_speeds;
                 this.updateCoords(this.x, this.y);
                 console.log("A pressed");
             }
             
             if (keyIsDown(this.keys[3])) {
-                this.x += 5;
+                this.x += character_speeds;
                 this.updateCoords(this.x, this.y);
                 console.log("D Pressed");
             }
@@ -176,7 +159,7 @@ class Player extends Character {
         }
 
         if (keyCode == (this.keys[2])) {
-            this.y += 5;
+            this.y += character_speeds;
             this.updateCoords(this.x, this.y);
             console.log("S pressed");
         }
@@ -215,6 +198,7 @@ class Player extends Character {
         this.render(x, y);
         this.physics();
         this.move();
+        this.drawNameTag();
     }
 
     keyPressed() {
