@@ -1,22 +1,118 @@
+//SCENE ORDER
+//start -> game -> gameOver
+let name_input = {
+    limit: 10
+};
+
 function start() {
-    this.setup = () => {
+    this.x = windowWidth / 2;
+    this.y = windowHeight / 2;
+    this.color = color(5, 60, 100);
+    this.enter = () => {
+        background(231, 25, 18);
         
+        //line(width / 2, 0, width / 2, height);
+        fill('white');
+        textSize(70);
+        textAlign(RIGHT);
+        text("Soul", this.x - 20, this.y - 150);
+        textAlign(LEFT);
+        fill(0, 70, 100);
+        text("Bound", this.x - 20, this.y - 150);
+        let button = createButton("Play");
+        button.position(this.x - 50, this.y * 1.15);
+        button.style("width", "100px");
+        button.style("border-radius", "10px");
+        button.style("box-shadow", "12px, 12px");
+
+        name_input.input = createInput('username');
+        name_input.input.position(this.x - 75, this.y);
+        
+        name_input.input.style('background-color', this.color);
+        name_input.input.style('text-align', 'CENTER');
+        name_input.input.style("border-radius", "10px");
+        name_input.input.style("width", "150px");
+
+        textAlign(CENTER);
+        textSize(18);
+        text("Username", this.x, this.y * 0.85);
+
+        button.mousePressed(() => {
+            if (name_input.input.size() != 0 && name_input.input.size()) {
+                if (name_input.input.value().length > 1) {
+                    this.sceneManager.showNextScene();
+
+                    name_input.value = name_input.input.value();
+                    button.remove();
+                    name_input.input.remove();
+                }
+                else {
+                    textAlign(CENTER);
+                    fill('red');
+                    text("Name must be more than 1 character", windowWidth / 2, windowHeight / 2 - 50);
+                }
+            }
+        });
     }
 
-    this.draw = () => {
+    this.keyPressed = () => {
+        if (keyCode == ENTER && name_input.input.size() > 0) {
+            if (name_input.input.value().length > 1) {
+                this.sceneManager.showNextScene();
 
+                name_input.value = name_input.input.value();
+                button.remove();
+                name_input.input.remove();
+            }
+            else {
+                textAlign(CENTER);
+                fill('red');
+                textSize(13);
+                text("Name must be more than 1 character", windowWidth / 2, windowHeight * .6);
+            }
+        }
     }
 }
 
 function game() {
+    let player;
+    let player2;
+    let Player_Initiated = false;
+    let power;
     this.setup = () => {
+        if (!Player_Initiated) {
+            //let name = prompt("What would you like your name to be?");
 
+            player = new Player(name_input.value, [87, 65, 83, 68, 81, 69], 220);
+            player2 = new Player("other", [104, 100, 101, 102, 103, 105], 10);
+            Player_Initiated = true;
+            power = new Power();
+        }
     }
 
     this.draw = () => {
+        image(backgroundImage, 0, 0, width, height);
+        if (Player_Initiated) player.draw(180, height), player2.draw(1240, height);
 
+
+        power.random();
+        power.show();
+        power.powerFall();
+        power.powerUpCollison();
+
+        if (player.health <= 0 || player2.health <= 0) {
+            if (player.health <= 0) winner = player2;
+            if (player2.health <= 0) winner = player;
+            this.sceneManager.showNextScene();
+        }
+    }
+
+    this.keyPressed = () => {
+        player.keyPressed();
+        player2.keyPressed();
     }
 }
+
 
 function gameOver() {
     this.setup = () => {
@@ -24,6 +120,10 @@ function gameOver() {
     }
 
     this.draw = () => {
-
+        let text_color = 1;
+        text_color++;
+        textAlign(CENTER);
+        fill(text_color % 360, 100, 100);
+        text(`${winner.name} WINS!`, width / 2, height / 2);
     }
 }

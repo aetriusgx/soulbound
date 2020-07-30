@@ -1,4 +1,4 @@
-let gravity = 80;
+let gravity = 40;
 let speed = 0.05;
 
 class Character {
@@ -20,7 +20,7 @@ class Character {
 
         this.speeds = 7.5;
         this.health = 100;
-        this.damage = 10;
+        this.damage = 5;
 
         this.lineVectors = {};
     }
@@ -271,8 +271,9 @@ class Player extends Character {
     drawNameTag() {
         if (this.present) {
             noStroke();
-            fill(theme == "dark" ? 'white' : 'black');
+            fill('black');
             textAlign(CENTER);
+            textSize(13);
             text(this.name, this.lineVectors.head.x, this.lineVectors.head.y - 30);
         }
     }
@@ -292,28 +293,27 @@ class Player extends Character {
                 this.updateCoords(this.x, this.y);
                 console.log("D Pressed");
             }
-        }
-    }
 
-    jumping() {
-        this.physics();
-        if (keyCode == (this.keys[0]) && this.canKeepJumping) {
-            this.canKeepJumping = false;
-            this.y -= 75;
-            this.updateCoords(this.x, this.y);
+            if (keyIsDown(this.keys[0])) {
+                let boost = 5;
+                boost += 2;
+                this.y -= boost;
 
-            console.log("W pressed");
-        }
+                setTimeout(() => {
+                    this.canKeepJumping = false;
+                }, 5000);
+            }
 
-        if (keyCode == (this.keys[2])) {
-            this.y += this.speeds;
-            this.updateCoords(this.x, this.y);
-            console.log("S pressed");
+            if (keyCode == (this.keys[2])) {
+                this.y += this.speeds;
+                this.updateCoords(this.x, this.y);
+                console.log("S pressed");
+            }
         }
     }
 
     punch(direction) {
-        let reach = 15;
+        let reach = 20;
         let cooldown = 150;
         switch (direction) {
             case 'left':
@@ -363,6 +363,39 @@ class Player extends Character {
                 this.lineVectors.rightArm.x2 += reach;
                 this.lineVectors.rightArm.y2 = this.lineVectors.rightArm.y1;
 
+                for (var player of Player.Players) {
+                    if (player.name != this.name) {
+                        let connectedWithLeftArm = collideLineLine(
+                            this.lineVectors.rightArm.x1, this.lineVectors.rightArm.y1, this.lineVectors.rightArm.x2, this.lineVectors.rightArm.y2,
+                            player.lineVectors.leftArm.x1, player.lineVectors.leftArm.y1, player.lineVectors.leftArm.x2, player.lineVectors.leftArm.y2
+                        );
+                        let connectedWithRightArm = collideLineLine(
+                            this.lineVectors.rightArm.x1, this.lineVectors.rightArm.y1, this.lineVectors.rightArm.x2, this.lineVectors.rightArm.y2,
+                            player.lineVectors.rightArm.x1, player.lineVectors.rightArm.y1, player.lineVectors.rightArm.x2, player.lineVectors.rightArm.y2
+                        );
+                        let connectedWithLeftLeg = collideLineLine(
+                            this.lineVectors.rightArm.x1, this.lineVectors.rightArm.y1, this.lineVectors.rightArm.x2, this.lineVectors.rightArm.y2,
+                            player.lineVectors.leftLeg.x1, player.lineVectors.leftLeg.y1, player.lineVectors.leftLeg.x2, player.lineVectors.leftLeg.y2
+                        );
+                        let connectedWithRightLeg = collideLineLine(
+                            this.lineVectors.rightArm.x1, this.lineVectors.rightArm.y1, this.lineVectors.rightArm.x2, this.lineVectors.rightArm.y2,
+                            player.lineVectors.rightLeg.x1, player.lineVectors.rightLeg.y1, player.lineVectors.rightLeg.x2, player.lineVectors.rightLeg.y2
+                        );
+                        let connectedWithBody = collideLineLine(
+                            this.lineVectors.rightArm.x1, this.lineVectors.rightArm.y1, this.lineVectors.rightArm.x2, this.lineVectors.rightArm.y2,
+                            player.lineVectors.body.x1, player.lineVectors.body.y1, player.lineVectors.body.x2, player.lineVectors.body.y2
+                        );
+                        let connectedWithHead = collideLineRect(
+                            this.lineVectors.rightArm.x1, this.lineVectors.rightArm.y1, this.lineVectors.rightArm.x2, this.lineVectors.rightArm.y2,
+                            player.lineVectors.head.x, player.lineVectors.head.y, player.lineVectors.head.r
+                        );
+
+                        if (connectedWithHead) player.health -= this.damage * 2;
+                        if (connectedWithBody) player.health -= this.damage * 1.25;
+                        if (connectedWithLeftArm || connectedWithLeftLeg || connectedWithRightArm || connectedWithRightLeg) player.health -= this.damage;
+
+                    }
+                }
                 setTimeout(() => {
                     this.lineVectors.rightArm.x2 = this.x + 27;
                     this.lineVectors.rightArm.y2 = this.y - 80.5;
@@ -382,7 +415,6 @@ class Player extends Character {
     }
 
     keyPressed() {
-        this.jumping();
         switch (keyCode) {
             case this.keys[4]:
                 this.punch('left');

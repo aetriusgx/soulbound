@@ -31,19 +31,15 @@ class Power {
 
             if(this.randomPower < 5) {
                 this.detectPowerUp(type.speed);
-                console.log('speed detected')
             }
             if(this.randomPower > 4 && this.randomPower < 10) {
                 this.detectPowerUp(type.damage);
-                console.log('damage detected')
             }
             if(this.randomPower > 9 && this.randomPower < 15) {
                 this.detectPowerUp(type.health);
-                console.log('health detected')
             }
             if(this.randomPower > 14 && this.randomPower < 21) {
                 this.detectPowerUp(type.jump);
-                console.log('jump detected')
             }
 
             if(this.y > windowHeight * 0.874) {
