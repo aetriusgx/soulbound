@@ -1,11 +1,12 @@
-let toggles = {};    
+let toggles = {};
+let images = {};    
 let socket;
 let backgroundImage;
 let sceneManager;
 let winner;
 
 function preload() {
-    backgroundImage = loadImage("../assets/background.jpg");
+    images.game_background = loadImage("../assets/background.jpg");
 }
 
 function setup() {

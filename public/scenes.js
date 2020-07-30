@@ -3,6 +3,7 @@
 let name_input = {
     limit: 10
 };
+let button;
 
 function start() {
     this.x = windowWidth / 2;
@@ -10,7 +11,7 @@ function start() {
     this.color = color(5, 60, 100);
     this.enter = () => {
         background(231, 25, 18);
-        
+
         //line(width / 2, 0, width / 2, height);
         fill('white');
         textSize(70);
@@ -19,15 +20,15 @@ function start() {
         textAlign(LEFT);
         fill(0, 70, 100);
         text("Bound", this.x - 20, this.y - 150);
-        let button = createButton("Play");
+        button = createButton("Play");
         button.position(this.x - 50, this.y * 1.15);
         button.style("width", "100px");
         button.style("border-radius", "10px");
         button.style("box-shadow", "12px, 12px");
 
-        name_input.input = createInput('username');
+        name_input.input = createInput('player1');
         name_input.input.position(this.x - 75, this.y);
-        
+
         name_input.input.style('background-color', this.color);
         name_input.input.style('text-align', 'CENTER');
         name_input.input.style("border-radius", "10px");
@@ -38,18 +39,17 @@ function start() {
         text("Username", this.x, this.y * 0.85);
 
         button.mousePressed(() => {
-            if (name_input.input.size() != 0 && name_input.input.size()) {
+            if (name_input.input.size() > 0) {
                 if (name_input.input.value().length > 1) {
-                    this.sceneManager.showNextScene();
-
                     name_input.value = name_input.input.value();
+
                     button.remove();
                     name_input.input.remove();
-                }
-                else {
+                    this.sceneManager.showNextScene();
+                } else {
                     textAlign(CENTER);
                     fill('red');
-                    text("Name must be more than 1 character", windowWidth / 2, windowHeight / 2 - 50);
+                    text("Name must be more than 1 character", windowWidth / 2, windowHeight / 2 + 20);
                 }
             }
         });
@@ -58,13 +58,12 @@ function start() {
     this.keyPressed = () => {
         if (keyCode == ENTER && name_input.input.size() > 0) {
             if (name_input.input.value().length > 1) {
-                this.sceneManager.showNextScene();
-
                 name_input.value = name_input.input.value();
+
                 button.remove();
                 name_input.input.remove();
-            }
-            else {
+                this.sceneManager.showNextScene();
+            } else {
                 textAlign(CENTER);
                 fill('red');
                 textSize(13);
@@ -91,7 +90,7 @@ function game() {
     }
 
     this.draw = () => {
-        image(backgroundImage, 0, 0, width, height);
+        image(images.game_background, 0, 0, width, height);
         if (Player_Initiated) player.draw(180, height), player2.draw(1240, height);
 
 
