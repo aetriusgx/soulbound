@@ -1,4 +1,6 @@
 let player;
+let player2;
+// startGame;
 let power;
 let theme = "light";
 let toggles = {};
@@ -18,6 +20,7 @@ function setup() {
         //let name = prompt("What would you like your name to be?");
 
         player = new Player("name", [87, 65, 83, 68, 81, 69], 220);
+        player2 = new Player("other", [104, 100, 101, 102, 103, 105], 10);
         Player_Initiated = true;
     }
 
@@ -31,6 +34,7 @@ function setup() {
     })
 
     power = new Power();
+    //startGame = new StartScene();
 }
 
 function draw() {
@@ -39,18 +43,20 @@ function draw() {
 
     toggles.theme.draw();
 
-    if (Player_Initiated) player.draw(180, height);
+    if (Player_Initiated) player.draw(180, height), player2.draw(240, height);
 
     themePress();
     power.random();
     power.show();
     power.powerFall();
     power.powerUpCollison();
+    //startGame.playButton();
 }
 
 function keyPressed() {
 
     player.keyPressed();
+    player2.keyPressed();
 }
 
 function themePress() {

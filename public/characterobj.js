@@ -33,30 +33,32 @@ class Character {
     /**@param {number} x
      * @param {number} y **/
     render(x, y) {
-        if (!this.present) {
+        if (!this.present && this.health > 0) {
             this.x = x;
             this.y = y;
             this.present = true;
 
             this.updateCoords(this.x, this.y);
         }
-        strokeWeight(4);
-        fill(this.hue ? this.hue : 0, this.hue ? 100 : 0, this.hue ? 100 : 0);
-        stroke(this.hue ? this.hue : 0, this.hue ? 100 : 0, this.hue ? 100 : 0);
+        if (this.present) {
+            strokeWeight(4);
+            fill(this.hue ? this.hue : 0, this.hue ? 100 : 0, this.hue ? 100 : 0);
+            stroke(this.hue ? this.hue : 0, this.hue ? 100 : 0, this.hue ? 100 : 0);
 
-        ellipse(this.lineVectors.head.x, this.lineVectors.head.y, this.lineVectors.head.r); //Head
-        line(this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2); //Left Arm
-        line(this.lineVectors.rightArm.x1, this.lineVectors.rightArm.y1, this.lineVectors.rightArm.x2, this.lineVectors.rightArm.y2); //Right Arm
-        line(this.lineVectors.body.x1, this.lineVectors.body.y1, this.lineVectors.body.x2, this.lineVectors.body.y2); //Body
-        line(this.lineVectors.leftLeg.x1, this.lineVectors.leftLeg.y1, this.lineVectors.leftLeg.x2, this.lineVectors.leftLeg.y2); //Left Leg
-        line(this.lineVectors.rightLeg.x1, this.lineVectors.rightLeg.y1, this.lineVectors.rightLeg.x2, this.lineVectors.rightLeg.y2); //Right Leg
+            ellipse(this.lineVectors.head.x, this.lineVectors.head.y, this.lineVectors.head.r); //Head
+            line(this.lineVectors.leftArm.x1, this.lineVectors.leftArm.y1, this.lineVectors.leftArm.x2, this.lineVectors.leftArm.y2); //Left Arm
+            line(this.lineVectors.rightArm.x1, this.lineVectors.rightArm.y1, this.lineVectors.rightArm.x2, this.lineVectors.rightArm.y2); //Right Arm
+            line(this.lineVectors.body.x1, this.lineVectors.body.y1, this.lineVectors.body.x2, this.lineVectors.body.y2); //Body
+            line(this.lineVectors.leftLeg.x1, this.lineVectors.leftLeg.y1, this.lineVectors.leftLeg.x2, this.lineVectors.leftLeg.y2); //Left Leg
+            line(this.lineVectors.rightLeg.x1, this.lineVectors.rightLeg.y1, this.lineVectors.rightLeg.x2, this.lineVectors.rightLeg.y2); //Right Leg
 
-        if (this.lineVectors.leftArm.x2 <= 0 || this.lineVectors.leftLeg.x2 <= 0) {
-            this.x = 27;
-        }
+            if (this.lineVectors.leftArm.x2 <= 0 || this.lineVectors.leftLeg.x2 <= 0) {
+                this.x = 27;
+            }
 
-        if (this.lineVectors.rightArm.x2 >= width || this.lineVectors.rightLeg.x2 >= width) {
-            this.x = width - 27;
+            if (this.lineVectors.rightArm.x2 >= width || this.lineVectors.rightLeg.x2 >= width) {
+                this.x = width - 27;
+            }
         }
     }
 
@@ -101,25 +103,28 @@ class Character {
     }
 
     showHealthBar() {
-        let x = this.lineVectors.head.x - this.lineVectors.head.r - this.lineVectors.head.r / 4;
-        fill(100);
-        strokeWeight(1);
-        rect(x, this.lineVectors.head.y - 40, 100, 15);
+        if (this.present) {
+            let x = this.lineVectors.head.x - this.lineVectors.head.r - this.lineVectors.head.r / 4;
+            fill(100);
+            strokeWeight(1);
+            rect(x, this.lineVectors.head.y - 40, 100, 15);
 
-        if (this.health >= 70) {
-            fill(129, 88, 77);
+            if (this.health >= 70) {
+                fill(129, 88, 77);
+            }
+            if (this.health >= 40 && this.health < 70) {
+                fill(64, 86, 100);
+            }
+            if (this.health >= 20 && this.health < 40) {
+                fill(41, 93, 90);
+            }
+            if (this.health >= 1 && this.health < 20) {
+                fill(0, 93, 90);
+            }
+            if (this.health <= 0) this.health = 0, this.present = false;
+            noStroke();
+            rect(x, this.lineVectors.head.y - 40, this.health, 15);
         }
-        if (this.health >= 40 && this.health < 70) {
-            fill(64, 86, 100);
-        }
-        if (this.health >= 20 && this.health < 40) {
-            fill(41, 93, 90);
-        }
-        if (this.health >= 1 && this.health < 20) {
-            fill(0, 93, 90);
-        }
-        noStroke();
-        rect(x, this.lineVectors.head.y - 40, this.health, 15);
     }
 
     physics() {
@@ -226,7 +231,7 @@ class Character {
                 );
                 if (head || leftarm || rightarm || body || leftleg || rightleg) return true;
             case 'point':
-                
+
                 if (head || leftarm || rightarm || body || leftleg || rightleg) return true;
             default:
                 return false;
@@ -347,7 +352,7 @@ class Player extends Character {
                         if (connectedWithLeftArm || connectedWithLeftLeg || connectedWithRightArm || connectedWithRightLeg) player.health -= this.damage;
                     }
                 }
-                
+
                 setTimeout(() => {
                     this.lineVectors.leftArm.x2 = this.x - 27;
                     this.lineVectors.leftArm.y2 = this.y - 80.5;
