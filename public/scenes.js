@@ -4,8 +4,11 @@ let name_input = {
     limit: 10
 };
 let button;
+let sound;
 
 function start() {
+    sound = new Sound(20, 21);
+    sound.show();
     this.x = windowWidth / 2;
     this.y = windowHeight / 2;
     this.color = color(5, 60, 100);
@@ -14,7 +17,7 @@ function start() {
 
         //line(width / 2, 0, width / 2, height);
         fill('white');
-        textSize(70);
+        textSize(80);
         textAlign(RIGHT);
         text("Soul", this.x - 20, this.y - 150);
         textAlign(LEFT);
@@ -23,26 +26,28 @@ function start() {
         button = createButton("Play");
         button.position(this.x - 50, this.y * 1.15);
         button.style("width", "100px");
+        button.style("heigth", "30px");
         button.style("border-radius", "10px");
         button.style("box-shadow", "12px, 12px");
 
-        name_input.input = createInput('player1');
+        name_input.input = createInput();
         name_input.input.position(this.x - 75, this.y);
 
         name_input.input.style('background-color', this.color);
         name_input.input.style('text-align', 'CENTER');
         name_input.input.style("border-radius", "10px");
         name_input.input.style("width", "150px");
+        name_input.input.style("height", "20px");
 
         textAlign(CENTER);
         textSize(18);
-        text("Username", this.x, this.y * 0.85);
+        text("Username", this.x, this.y * 0.9);
 
         button.mousePressed(() => {
             if (name_input.input.size() > 0) {
                 if (name_input.input.value().length > 1) {
                     name_input.value = name_input.input.value();
-
+                    
                     button.remove();
                     name_input.input.remove();
                     this.sceneManager.showNextScene();

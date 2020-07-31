@@ -4,9 +4,12 @@ let socket;
 let backgroundImage;
 let sceneManager;
 let winner;
+let soundTrack;
+
 
 function preload() {
-    images.game_background = loadImage("../assets/background.jpg");
+    images.game_background = loadImage("../assets/images/background.jpg");
+    soundTrack = loadSound("../assets/sounds/action_crave.mp3");
 }
 
 function setup() {
@@ -17,6 +20,9 @@ function setup() {
     socket.on('key', (data) => {
         console.log("sending data");
     });
+
+    
+    
 
     sceneManager = new SceneManager();
     sceneManager.addScene(start);
