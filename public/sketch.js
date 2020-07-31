@@ -21,7 +21,8 @@ function setup() {
         console.log("sending data");
     });
 
-    
+    soundTrack.play();
+    soundTrack.loop();
     
 
     sceneManager = new SceneManager();
