@@ -5,15 +5,20 @@ let name_input = {
 };
 let button;
 let sound;
+let slider;
+let model_hue = 220;
 
 function start() {
+    let character = new Character(model_hue);
+    
     this.x = windowWidth / 2;
     this.y = windowHeight / 2;
     this.color = color(5, 60, 100);
     this.enter = () => {
         background(231, 25, 18);
-
+        
         //line(width / 2, 0, width / 2, height);
+        
         fill('white');
         textSize(80);
         textAlign(RIGHT);
@@ -21,25 +26,36 @@ function start() {
         textAlign(LEFT);
         fill(0, 70, 100);
         text("Bound", this.x - 25, this.y - 150);
+        
         button = createButton("Play");
         button.position(this.x - 50, this.y * 1.15);
         button.style("width", "100px");
         button.style("heigth", "30px");
         button.style("border-radius", "10px");
-        button.style("box-shadow", "12px, 12px");
+        button.style("box-shadow", "12px" , "12px");
 
+        textAlign(CENTER);
+        textSize(18);
+        text("Username", this.x, this.y * 0.875);
         name_input.input = createInput();
         name_input.input.position(this.x - 75, this.y);
-
         name_input.input.style('background-color', this.color);
         name_input.input.style('text-align', 'CENTER');
         name_input.input.style("border-radius", "10px");
         name_input.input.style("width", "150px");
         name_input.input.style("height", "20px");
 
+        slider = createSlider(0, 365, 220);
+        slider.position(windowWidth * 0.9 - 75, windowHeight * 0.6);
+        slider.style('width', "150px");
+        model_hue = slider.value();
+
+        noStroke();
+        textSize(14);
         textAlign(CENTER);
-        textSize(18);
-        text("Username", this.x, this.y * 0.875);
+        fill('white');
+        text("Player One", windowWidth * 0.9, windowHeight * 0.55);
+        character.render(windowWidth * 0.9, windowHeight * 0.5);
 
         this.draw = () => {
             sound = new Sound(20, 21);
