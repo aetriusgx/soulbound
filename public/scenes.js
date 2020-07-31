@@ -13,14 +13,14 @@ function start() {
     this.enter = () => {
         background(231, 25, 18);
 
-        line(width / 2, 0, width / 2, height);
+        //line(width / 2, 0, width / 2, height);
         fill('white');
         textSize(80);
         textAlign(RIGHT);
-        text("Soul", this.x - 20, this.y - 150);
+        text("Soul", this.x - 25, this.y - 150);
         textAlign(LEFT);
         fill(0, 70, 100);
-        text("Bound", this.x - 20, this.y - 150);
+        text("Bound", this.x - 25, this.y - 150);
         button = createButton("Play");
         button.position(this.x - 50, this.y * 1.15);
         button.style("width", "100px");
@@ -88,8 +88,6 @@ function game() {
     let power;
     this.setup = () => {
         if (!Player_Initiated) {
-            //let name = prompt("What would you like your name to be?");
-
             player = new Player(name_input.value, [87, 65, 83, 68, 81, 69], 220);
             player2 = new Player("other", [104, 100, 101, 102, 103, 105], 10);
             Player_Initiated = true;
