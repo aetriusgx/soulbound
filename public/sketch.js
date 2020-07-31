@@ -1,28 +1,46 @@
-let bob;
+let toggles = {};
+let images = {};    
 let socket;
+let backgroundImage;
+let sceneManager;
+let winner;
+let soundTrack;
+
 
 function preload() {
-
+    images.game_background = loadImage("../assets/images/background.jpg");
+    soundTrack = loadSound("../assets/sounds/action_crave.mp3");
 }
 
 function setup() {
-    createCanvas(windowWidth, windowHeight);
+    createCanvas(windowWidth, windowHeight * .9);
     colorMode(HSB, 360, 100, 100);
 
-    socket = io.connect('http://localhost:5501');
-    socket.on('key', newDrawing);
+    socket = io.connect("http://localhost:5500/");
+    socket.on('key', (data) => {
+        console.log("sending data");
+    });
 
-    bob = new Player("Bob", [87, 65, 83, 68, 81, 69], 220);
-}
-function newDrawing(data) {
-    console.log("Sending Data");
-}
+    soundTrack.play();
+    soundTrack.loop();
+    
+
+    sceneManager = new SceneManager();
+    sceneManager.addScene(start);
+    sceneManager.addScene(game);
+    sceneManager.addScene(gameOver);
+    
+    sceneManager.showNextScene();
+}    
 
 function draw() {
-    background(0, 0, 95);
-    bob.draw(180, height);
+    sceneManager.draw();
 }
 
 function keyPressed() {
-    bob.keyPressed();
+    sceneManager.handleEvent('keyPressed');
+}
+
+function mousePressed() {
+    sceneManager.handleEvent('mousePressed');
 }

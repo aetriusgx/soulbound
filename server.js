@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const server = app.listen(5501);
+const server = app.listen(5500);
 
 app.use(express.static('public'));
 
@@ -23,4 +23,3 @@ async function newConnection(socket) {
 
     }
 }
-
