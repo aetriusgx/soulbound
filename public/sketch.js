@@ -4,7 +4,7 @@ let socket;
 let backgroundImage;
 let sceneManager;
 let winner;
-let soundTrack;
+
 
 
 function preload() {
@@ -15,12 +15,10 @@ function preload() {
 function setup() {
     createCanvas(windowWidth, windowHeight * .9);
     colorMode(HSB, 360, 100, 100);
-
     socket = io.connect("http://localhost:5500/");
     socket.on('key', (data) => {
         console.log("sending data");
     });
-
     soundTrack.play();
     soundTrack.loop();
     
