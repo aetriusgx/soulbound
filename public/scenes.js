@@ -6,10 +6,9 @@ let name_input = {
 let button;
 let sound;
 let slider;
-let model_hue = 220;
+let model_hue;
 
 function start() {
-    let character = new Character(model_hue);
     
     this.x = windowWidth / 2;
     this.y = windowHeight / 2;
@@ -45,30 +44,25 @@ function start() {
         name_input.input.style("width", "150px");
         name_input.input.style("height", "20px");
 
-        slider = createSlider(0, 365, 220);
+        slider = createSlider(0, 360, 220);
         slider.position(windowWidth * 0.9 - 75, windowHeight * 0.6);
         slider.style('width', "150px");
-        model_hue = slider.value();
-
+        
         noStroke();
         textSize(14);
         textAlign(CENTER);
         fill('white');
         text("Player One", windowWidth * 0.9, windowHeight * 0.55);
-        character.render(windowWidth * 0.9, windowHeight * 0.5);
-
-        this.draw = () => {
-            sound = new Sound(20, 21);
-            sound.show();
-        }
 
         button.mousePressed(() => {
             if (name_input.input.value().length > 0) {
                 if (name_input.input.value().length > 1) {
                     name_input.value = name_input.input.value();
 
+                    model_hue = slider.value();
                     button.remove();
                     name_input.input.remove();
+                    slider.remove();
                     this.sceneManager.showNextScene();
                 } else {
                     textAlign(CENTER);
@@ -79,14 +73,26 @@ function start() {
         });
 
     }
+    
+    this.draw = () => {
+        model_hue = slider.value();
+        let character = new Character(model_hue);
+        character.render(windowWidth * 0.9, windowHeight * 0.5);
+        noStroke();
+
+        // sound = new Sound(13561, 380);
+        // sound.show();
+    }
 
     this.keyPressed = () => {
         if (keyCode == ENTER && name_input.input.value().length > 0) {
             if (name_input.input.value().length > 1) {
                 name_input.value = name_input.input.value();
 
+                model_hue = slider.value();
                 button.remove();
                 name_input.input.remove();
+                slider.remove();
                 this.sceneManager.showNextScene();
             } else {
                 textAlign(CENTER);
@@ -104,7 +110,7 @@ function game() {
     let power;
     this.setup = () => {
         if (!Player_Initiated) {
-            player = new Player(name_input.value, [87, 65, 83, 68, 81, 69], 220);
+            player = new Player(name_input.value, [87, 65, 83, 68, 81, 69], model_hue);
             player2 = new Player("other", [104, 100, 101, 102, 103, 105], 10);
             Player_Initiated = true;
             power = new Power();

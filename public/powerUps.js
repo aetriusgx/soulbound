@@ -72,21 +72,23 @@ class Power {
             }
             if(hit && this.randomPower > 4 && this.randomPower < 10) {
                 if(!isActive){
-
+                    player.damage = player.damage + 2.5;
                     powerUpActivity = false;
                     console.log("Damage Collided");
                     isActive = true;
                     this.randomPower = round(random(0, 20));
                     setTimeout(() => {
                         console.log("PowerUp Done");
+                        player.damage = 5;
                         isActive = false;
                     }, 5000);
                 }
             }
             if(hit && this.randomPower > 9 && this.randomPower < 15) {
                 if(!isActive){
-
+                    player.health = player.health + 25;
                     powerUpActivity = false;
+                    player.health = player.health + 50;
                     console.log("Health Collide");
                     isActive = true;
                     this.randomPower = round(random(0, 20));
@@ -98,13 +100,14 @@ class Power {
             }
             if(hit && this.randomPower > 14 && this.randomPower < 21) {
                 if(!isActive){
-                    
+                    player.boost = player.boost + 2;
                     powerUpActivity = false;
                     console.log("Jump Collide");
                     isActive = true;
                     this.randomPower = round(random(0, 20));
                     setTimeout(() => {
                         console.log("PowerUp Done");
+                        player.boost = 5;
                         isActive = false;
                     }, 5000);
                 }
@@ -132,7 +135,6 @@ class Power {
                 text('damage', this.x, this.y);
             break;
             case 'health':
-                strokeWeight(2);
                 fill(122, 95, 100);
                 ellipse(this.x, this.y, this.diameter);
                 strokeWeight(2);

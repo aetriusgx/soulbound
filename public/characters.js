@@ -285,13 +285,11 @@ class Player extends Character {
             if (keyIsDown(this.keys[1])) {
                 this.x -= this.speeds;
                 this.updateCoords(this.x, this.y);
-                console.log("A pressed");
             }
 
             if (keyIsDown(this.keys[3])) {
                 this.x += this.speeds;
                 this.updateCoords(this.x, this.y);
-                console.log("D Pressed");
             }
 
             if (keyIsDown(this.keys[0])) {
@@ -307,7 +305,6 @@ class Player extends Character {
             if (keyCode == (this.keys[2])) {
                 this.y += this.speeds;
                 this.updateCoords(this.x, this.y);
-                console.log("S pressed");
             }
         }
     }
