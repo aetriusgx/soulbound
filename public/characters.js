@@ -123,7 +123,8 @@ class Character {
             }
             if (this.health <= 0) this.health = 0, this.present = false;
             noStroke();
-            rect(x, this.lineVectors.head.y - 40, this.health, 15);
+            if (this.health > 0 && this.health <= 100) rect(x, this.lineVectors.head.y - 40, this.health, 15);
+            if (this.health > 100) rect(x, this.lineVectors.head.y - 40, 100, 15);
         }
     }
 
